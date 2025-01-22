@@ -53,5 +53,5 @@ dependencies {
 
 
     implementation("io.appwrite:sdk-for-android:6.1.0")
-
+    implementation ("androidx.cardview:cardview:1.0.0")
 }
