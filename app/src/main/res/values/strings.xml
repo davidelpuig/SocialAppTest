@@ -16,6 +16,7 @@
     <string name="APPWRITE_PROJECT_ID">678e34ca002a8168aa4b</string>
     <string name="APPWRITE_DATABASE_ID">"678f5c1000004ff4e76c"</string>
     <string name="APPWRITE_POSTS_COLLECTION_ID">678f5cf100359fb9df3a</string>
+    <string name="APPWRITE_STORAGE_BUCKET_ID">678f826100244b92f8a2</string>
 
 
 </resources>

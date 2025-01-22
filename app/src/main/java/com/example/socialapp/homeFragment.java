@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,6 +38,7 @@ import io.appwrite.services.Databases;
 public class homeFragment extends Fragment {
 
     NavController navController;
+    AppViewModel appViewModel;
 
     ImageView photoImageView;
     TextView displayNameTextView, emailTextView;
@@ -60,6 +62,7 @@ public class homeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         navController = Navigation.findNavController(view);  // <-----------------
+        appViewModel = new ViewModelProvider(requireActivity()).get(AppViewModel.class);
 
         NavigationView navigationView = view.getRootView().findViewById(R.id.nav_view);
         View header = navigationView.getHeaderView(0);
@@ -110,7 +113,7 @@ public class homeFragment extends Fragment {
 
     class PostViewHolder extends RecyclerView.ViewHolder
     {
-        ImageView authorPhotoImageView, likeImageView;
+        ImageView authorPhotoImageView, likeImageView, mediaImageView;
         TextView authorTextView, contentTextView, numLikesTextView;
 
         PostViewHolder(@NonNull View itemView) {
@@ -118,6 +121,7 @@ public class homeFragment extends Fragment {
 
             authorPhotoImageView = itemView.findViewById(R.id.authorPhotoImageView);
             likeImageView = itemView.findViewById(R.id.likeImageView);
+            mediaImageView = itemView.findViewById(R.id.mediaImage);
             authorTextView = itemView.findViewById(R.id.authorTextView);
             contentTextView = itemView.findViewById(R.id.contentTextView);
             numLikesTextView = itemView.findViewById(R.id.numLikesTextView);
@@ -197,6 +201,21 @@ public class homeFragment extends Fragment {
 
             });
 
+            // Miniatura de media
+            if (post.get("mediaUrl") != null) {
+                holder.mediaImageView.setVisibility(View.VISIBLE);
+                if ("audio".equals(post.get("mediaType").toString())) {
+                    Glide.with(requireView()).load(R.drawable.audio).centerCrop().into(holder.mediaImageView);
+                } else {
+                    Glide.with(requireView()).load(post.get("mediaUrl").toString()).centerCrop().into(holder.mediaImageView);
+                }
+                holder.mediaImageView.setOnClickListener(view -> {
+                    appViewModel.postSeleccionado.setValue(post);
+                    navController.navigate(R.id.mediaFragment);
+                });
+            } else {
+                holder.mediaImageView.setVisibility(View.GONE);
+            }
         }
 
         @Override
